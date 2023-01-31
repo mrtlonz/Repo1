@@ -1,0 +1,168 @@
+---
+title: "Example"
+author: "TLonz"
+format: html
+editor: visual
+---
+
+```{r}
+```
+
+
+```{r}
+#| echo: false
+ggplot(data = trains, 
+       mapping = aes(x = age, 
+                     y = income)) + 
+  geom_point(color = "steelblue") +
+  labs(title = "Age and Income Among Boston Commuters",
+       subtitle = "Older commuters don't seem to make more money",
+       x = "Age",
+       y = "Income",
+       caption = "Data source: Enos (2014)")
+```
+```{r}
+# Note that we can use either single or double quotes when creating items like
+# titles and axis labels. In this case, we use single quotes for the subtitle
+# because we want to put the word middle to print within double quotes in the
+# actual plot.
+
+ggplot(trains, 
+       aes(x = income)) +
+  geom_histogram(bins = 50) +
+  labs(title = "Income Among Boston Commuter",
+       subtitle = 'Why are there so few people with "middle" incomes?',
+       x = "Income",
+       y = "Count",
+       caption = "Data source: Enos (2014)")
+```
+
+
+```{r}
+#| echo: false
+ggplot(trains, 
+       aes(x = income)) +
+  geom_histogram(bins = 50,
+                 fill = "steelblue") +
+  labs(title = "Income Among Boston Commuter",
+       subtitle = 'Why are there so few people with "middle" incomes?',
+       x = "Income",
+       y = "Count",
+       caption = "Data source: Enos (2014)")
+
+```
+```{r}
+ggplot(data = trains, 
+       mapping = aes(x = att_start, 
+                     y = att_end)) + 
+  geom_point() +
+  labs(title = "Immigration Attitudes Among Boston Commuters",
+       subtitle = "Attitudes did not change much after the experiment",
+       x = "Attitude Before Experiment",
+       y = "Attitude After Experiment",
+       caption = "Data source: Enos (2014)")
+```
+
+```{r}
+ggplot(trains, 
+       aes(x = race, fill = treatment)) +
+  geom_bar()
+
+```
+
+```{r}
+## geom_col() is similar to geom_bar(), except that geom_col() requires you to calculate the number of observations in each category ahead of time. geom_bar() does the calculation for you. See an example below.
+
+trains |> 
+  group_by(race,treatment) |>
+  summarize(count = sum(n())) |> 
+  ggplot(mapping = aes(x = race,
+                       y = count,
+                       fill = treatment)) +
+   geom_col(position = "dodge")
+```
+
+```{r}
+## We can add a trend line to our graph by adding the layer geom_smooth(). Including trend lines allow us to visualize the relationship between att_start and att_end.
+
+ggplot(trains, 
+       aes(x = att_start, 
+           y = att_end)) + 
+  geom_point() +
+  labs(title = "Immigration Attitudes Among Boston Commuters",
+       subtitle = "Attitudes did not change much after the experiment",
+       x = "Attitude Before Experiment",
+       y = "Attitude After Experiment",
+       caption = "Data source: Enos (2014)") +
+  geom_smooth()
+
+```
+
+```{r}
+## Smoothing out line
+
+ggplot(trains, 
+       aes(x = att_start, 
+           y = att_end)) + 
+  geom_point() +
+  labs(title = "Immigration Attitudes Among Boston Commuters",
+       subtitle = "Attitudes did not change much after the experiment",
+       x = "Attitude Before Experiment",
+       y = "Attitude After Experiment",
+       caption = "Data source: Enos (2014)") +
+  geom_smooth(method = "lm", 
+              formula = y ~ x)
+
+```
+
+```{r}
+trains[c("age", "party")] |> 
+  print(n = 3)
+
+
+```
+
+```{r}
+library(gapminder)
+gapminder_filt <- gapminder |> 
+      filter(year == 2007, continent != "Oceania")
+
+ggplot(data = gapminder_filt, 
+       mapping = aes(x = gdpPercap, 
+                     y = lifeExp, 
+                     color = continent)) +
+  geom_point() +
+  facet_wrap(~ continent)
+
+```
+
+```{r}
+ggplot(data = gapminder_filt, 
+       mapping = aes(x = gdpPercap, 
+                     y = lifeExp, 
+                     color = continent)) +
+  geom_point() +
+  facet_wrap(~ continent, nrow = 1) +
+  geom_smooth(method = "lm", 
+              formula = y ~ x, 
+              se = FALSE)
+```
+
+```{r}
+ggplot(gapminder_filt, 
+       aes(gdpPercap, lifeExp, color = continent)) +
+  geom_point() +
+  facet_wrap(~ continent, nrow = 1) +
+  geom_smooth(formula = y ~ x, method = "lm", se = FALSE) + 
+  scale_x_log10() +
+  labs(title = "Life Expectancy and GDP per Capita (2007)",
+       subtitle = "Selected Nations by Continent",
+       x = "GDP per Capita, USD",
+       y = "Life Expectancy, Years",
+       caption = "Source: Gapminder") +
+  geom_text(aes(label = country), 
+            size = 2, 
+            color = "black", 
+            check_overlap = TRUE)
+```
+

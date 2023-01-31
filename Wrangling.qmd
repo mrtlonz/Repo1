@@ -1,0 +1,112 @@
+---
+title: "Wrangling"
+author: "Terence"
+format: html
+editor: visual
+---
+
+```{r}
+#| echo: false
+
+library(tidyverse)
+library(primer.data)
+library(lubridate)
+library(skimr)
+library(nycflights13)
+library(gapminder)
+library(fivethirtyeight)
+```
+
+```{r}
+tbl_fruit <- tibble(fruit = fruit)
+
+## Pic1
+tbl_fruit |> 
+  slice_sample(n = 8)
+
+
+## Pic2 - looks to C :-) if there is a "C" in the fruit name
+tbl_fruit |> 
+  mutate(fruit_in_name = str_detect(fruit, pattern = "c")) 
+
+
+## Pic3
+tbl_fruit |> 
+  mutate(name_length = str_length(fruit)) 
+
+
+#Pic4
+tbl_fruit |> 
+  mutate(first_three_letters = str_sub(fruit, 1, 3)) 
+
+
+#Pic5
+tbl_fruit |> 
+  mutate(name_with_s = str_c(fruit, "s")) 
+
+#Pic6
+tbl_fruit |> 
+  mutate(capital_A = str_replace(fruit, 
+                                 pattern = "a", 
+                                 replacement = "A")) 
+
+#Pic7 - Fruits with a "W"
+tbl_fruit |>
+  filter(str_detect(fruit, pattern = "w"))
+
+
+#Pic8 - use . to * for a char
+tbl_fruit |>
+  filter(str_detect(fruit, pattern = "b.r"))
+
+#Pic9 & 10 - Use to find 1st and last data in a string
+tbl_fruit |>
+  filter(str_detect(fruit, pattern = "^p"))
+
+tbl_fruit |>
+  filter(str_detect(fruit, pattern = "o$"))
+```
+
+
+```{r}
+## Factors
+
+tibble(X = letters[1:3]) |> 
+  mutate(fac_1 = factor(X)) |> 
+  mutate(fac_2 = as.factor(X)) |> 
+  mutate(fac_3 = parse_factor(X))
+
+
+```
+
+```{r}
+## Factors
+
+tibble(X = letters[1:3]) |> 
+  mutate(fac_1 = factor(X)) |> 
+  mutate(fac_2 = as.factor(X)) |> 
+  mutate(fac_3 = parse_factor(X))
+
+str(gapminder$continent)
+
+
+levels(gapminder$continent)
+
+
+nlevels(gapminder$continent)
+
+gapminder |> 
+  count(continent)
+
+
+```
+
+## 2.4.1 https://ppbds.github.io/primer/02-wrangling.html
+
+
+
+
+
+
+
+
